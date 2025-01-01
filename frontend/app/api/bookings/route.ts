@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const BACKEND_URL = 'http://localhost:5000/api/bookings'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/bookings'
 
 export async function POST(request: Request) {
   try {
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(data)
   } catch (error) {
+    console.error('API Error:', error)
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: 500 }
@@ -38,6 +39,7 @@ export async function GET() {
 
     return NextResponse.json(data)
   } catch (error) {
+    console.error('API Error:', error)
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: 500 }

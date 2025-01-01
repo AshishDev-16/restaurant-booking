@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const BACKEND_URL = 'http://localhost:5000/api/bookings'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/bookings'
 
 export async function DELETE(
   request: Request,
@@ -21,6 +21,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Booking deleted successfully' })
   } catch (error) {
+    console.error('API Error:', error)
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: 500 }
