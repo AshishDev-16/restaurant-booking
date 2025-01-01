@@ -191,22 +191,45 @@ export default function BookingForm() {
 
       <div className="input-group">
         <Label htmlFor="guests" className="input-label">Number of Guests *</Label>
-        <Input
-          id="guests"
-          type="number"
-          className="input-field"
-          required
-          min="1"
-          max="20"
-          placeholder="1"
-          value={formData.guests}
-          onChange={(e) => {
-            const value = parseInt(e.target.value);
-            if (!isNaN(value)) {
-              setFormData({ ...formData, guests: Math.max(1, value) });
-            }
-          }}
-        />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              const newValue = Math.max(1, formData.guests - 1);
+              setFormData({ ...formData, guests: newValue });
+            }}
+            className="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+          >
+            -
+          </button>
+          <Input
+            id="guests"
+            type="number"
+            className="input-field text-center"
+            required
+            min="1"
+            max="20"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={formData.guests}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              if (!isNaN(value)) {
+                setFormData({ ...formData, guests: Math.max(1, Math.min(20, value)) });
+              }
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const newValue = Math.min(20, formData.guests + 1);
+              setFormData({ ...formData, guests: newValue });
+            }}
+            className="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+          >
+            +
+          </button>
+        </div>
       </div>
 
       <div className="input-group">
