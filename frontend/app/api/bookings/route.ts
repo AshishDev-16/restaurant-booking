@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/bookings'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const response = await fetch(BACKEND_URL, {
+    const response = await fetch(`${BACKEND_URL}/bookings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     })
 
     const data = await response.json()
+    console.log('API Response:', data)
 
     if (!response.ok) {
       return NextResponse.json(
@@ -34,8 +35,9 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const response = await fetch(BACKEND_URL)
+    const response = await fetch(`${BACKEND_URL}/bookings`)
     const data = await response.json()
+    console.log('API Response:', data)
 
     return NextResponse.json(data)
   } catch (error) {

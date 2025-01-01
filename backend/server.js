@@ -8,9 +8,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://restaurant-booking-vgse.vercel.app']
-    : 'http://localhost:3000'
+  origin: ['https://restaurant-booking-vert.vercel.app/', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'DELETE'],
+  credentials: true
 }));
 app.use(express.json());
 

@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/bookings'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const response = await fetch(`${BACKEND_URL}/${params.id}`, {
+    const response = await fetch(`${BACKEND_URL}/bookings/${params.id}`, {
       method: 'DELETE',
     })
 
