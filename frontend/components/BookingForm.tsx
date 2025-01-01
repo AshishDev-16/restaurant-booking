@@ -203,7 +203,7 @@ export default function BookingForm() {
             selected={date}
             onSelect={setDate}
             className="rounded-lg border shadow"
-            disabled={(date) => date < new Date()}
+            disabled={(date: Date) => date < new Date()}
           />
           
           <TimeSlots

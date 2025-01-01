@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { CalendarDays, Users, Mail, Phone, Trash2, PlusCircle, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 
 interface Booking {
