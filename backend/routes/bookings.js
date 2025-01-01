@@ -1,17 +1,16 @@
-const express = require('express');
+import express from 'express';
+import Booking from '../models/Booking.js';
+
 const router = express.Router();
-const Booking = require('../models/Booking');
 
 // Create a new booking
 router.post('/', async (req, res) => {
   try {
-    // Validate required fields
     const { name, email, phone, date, time, guests } = req.body;
     if (!name || !email || !phone || !date || !time || !guests) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Check for existing booking with same date and time
     const existingBooking = await Booking.findOne({
       date: new Date(date),
       time: time
@@ -54,4 +53,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router; 
+export default router; 
