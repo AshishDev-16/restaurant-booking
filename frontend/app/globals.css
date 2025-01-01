@@ -48,15 +48,19 @@
 
 /* Custom styles for time slots */
 .time-slot {
-  @apply px-4 py-2 text-sm rounded-md transition-colors;
+  @apply px-4 py-2 text-sm rounded-md transition-all duration-200 transform;
+}
+
+.time-slot:not(.selected):not(:disabled):hover {
+  @apply bg-gray-200 scale-105 shadow-md;
 }
 
 .time-slot.selected {
-  @apply bg-blue-500 text-white;
+  @apply bg-blue-500 text-white scale-105 shadow-md;
 }
 
-.time-slot:not(.selected) {
-  @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+.time-slot:disabled {
+  @apply cursor-not-allowed opacity-50;
 }
 
 /* Card styles */
@@ -83,4 +87,36 @@
 
 .input-field {
   @apply w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500;
+} 
+
+/* Add these responsive styles */
+@layer utilities {
+  .form-container {
+    @apply p-4 sm:p-6 space-y-4 sm:space-y-6;
+  }
+
+  .input-group {
+    @apply space-y-1.5 sm:space-y-2;
+  }
+
+  .input-label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .input-field {
+    @apply w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base;
+  }
+
+  .time-slot {
+    @apply px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md transition-colors;
+  }
+}
+
+/* Update card styles */
+.booking-card {
+  @apply bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden;
+}
+
+.booking-card-header {
+  @apply bg-blue-500 p-4 sm:p-6 text-white;
 } 

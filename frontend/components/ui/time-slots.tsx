@@ -42,25 +42,28 @@ export function TimeSlots({ selectedTime, onTimeSelect, selectedDate }: TimeSlot
   }, [selectedDate]);
 
   return (
-    <div className="grid grid-cols-2 gap-2">
-      {timeSlots.map((time) => {
-        const isBooked = bookedSlots.includes(time);
-        return (
-          <button
-            key={time}
-            type="button"
-            disabled={isBooked}
-            onClick={() => onTimeSelect(time)}
-            className={cn(
-              "time-slot",
-              isBooked ? "bg-gray-200 text-gray-400 cursor-not-allowed" : 
-              selectedTime === time ? "selected" : ""
-            )}
-          >
-            {time} {isBooked && '(Booked)'}
-          </button>
-        )
-      })}
+    <div className="mt-2">
+      <div className="mb-2 text-sm font-medium text-gray-700">Available Times</div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 min-w-[300px] sm:min-w-0">
+        {timeSlots.map((time) => {
+          const isBooked = bookedSlots.includes(time);
+          return (
+            <button
+              key={time}
+              type="button"
+              disabled={isBooked}
+              onClick={() => onTimeSelect(time)}
+              className={cn(
+                "time-slot whitespace-nowrap",
+                isBooked ? "bg-gray-200 text-gray-400 cursor-not-allowed" : 
+                selectedTime === time ? "selected" : ""
+              )}
+            >
+              {time} {isBooked && '(Booked)'}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 } 

@@ -7,6 +7,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { TimeSlots } from './ui/time-slots';
 import { useToast } from '../hooks/use-toast';
+import confetti from 'canvas-confetti';
 
 export default function BookingForm() {
   const router = useRouter();
@@ -20,9 +21,19 @@ export default function BookingForm() {
     guests: 1,
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
     if (!date || !selectedTime) {
       toast({
@@ -87,12 +98,15 @@ export default function BookingForm() {
       }
 
       setShowConfirmation(true);
+      triggerConfetti();
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -197,29 +211,63 @@ export default function BookingForm() {
 
       <div className="input-group">
         <Label className="input-label">Select Date & Time *</Label>
-        <div className="grid md:grid-cols-2 gap-6">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-lg border shadow"
-            disabled={(date: Date) => date < new Date()}
-          />
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-4">
+          <div className="w-full">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="border shadow-sm"
+              disabled={(date) => date < new Date()}
+              fromDate={new Date()}
+            />
+          </div>
           
-          <TimeSlots
-            selectedTime={selectedTime}
-            onTimeSelect={setSelectedTime}
-            selectedDate={date}
-          />
+          <div className="w-full">
+            <TimeSlots
+              selectedTime={selectedTime}
+              onTimeSelect={setSelectedTime}
+              selectedDate={date}
+            />
+          </div>
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
-      >
-        Book Table
-      </button>
+      <div className="flex gap-4 mt-6">
+        <button
+          type="button"
+          onClick={() => {
+            setFormData({
+              name: '',
+              email: '',
+              phone: '',
+              guests: 1,
+            });
+            setDate(undefined);
+            setSelectedTime('');
+          }}
+          className="w-1/3 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+        >
+          Clear Form
+        </button>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-2/3 bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
+        >
+          {isLoading ? (
+            <>
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Booking...
+            </>
+          ) : (
+            'Book Table'
+          )}
+        </button>
+      </div>
     </form>
   );
 } 
