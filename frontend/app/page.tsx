@@ -1,28 +1,23 @@
 'use client';
 
 import { RestaurantHeader } from '../components/RestaurantHeader';
-import { PhotoGallery } from '../components/PhotoGallery';
 import { MenuHighlights } from '../components/MenuHighlights';
-import BookingForm from '../components/BookingForm';
 
 export default function Home() {
   return (
     <main>
       <RestaurantHeader />
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column */}
-          <div className="lg:col-span-2 space-y-8">
-            <PhotoGallery />
-            <MenuHighlights />
+        <div className="space-y-8">
+          <div className="prose max-w-none">
+            <h2>About The Gourmet Kitchen</h2>
+            <p>
+              Welcome to The Gourmet Kitchen, where traditional flavors meet modern culinary artistry. 
+              Our restaurant offers an elegant dining experience with a focus on premium vegetarian cuisine.
+            </p>
           </div>
-          
-          {/* Right Column - Booking Form */}
-          <div>
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h2 className="text-xl font-semibold mb-6">Reserve Your Table</h2>
-              <BookingForm />
-            </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <MenuHighlights />
           </div>
         </div>
       </div>

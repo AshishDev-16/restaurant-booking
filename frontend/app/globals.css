@@ -110,6 +110,14 @@
   .time-slot {
     @apply px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md transition-colors;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* Update card styles */

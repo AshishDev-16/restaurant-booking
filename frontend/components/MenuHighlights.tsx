@@ -6,21 +6,24 @@ const menuItems = [
     description: "Fresh cottage cheese in rich aromatic gravy with bell peppers and Indian spices",
     price: "₹495",
     tag: "Chef's Special",
-    icon: ChefHat
+    icon: ChefHat,
+    imageUrl: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=2670&auto=format&fit=crop"
   },
   {
-    name: "Truffle Mushroom Risotto",
-    description: "Creamy Arborio rice with wild mushrooms and black truffle",
-    price: "₹795",
+    name: "Malai Kofta",
+    description: "Soft cottage cheese dumplings in rich, creamy cashew and tomato gravy",
+    price: "₹445",
     tag: "Award Winner",
-    icon: Award
+    icon: Award,
+    imageUrl: "https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?q=80&w=2574&auto=format&fit=crop"
   },
   {
     name: "Dal Makhani",
     description: "Slow-cooked black lentils with rich cream and butter, a house specialty",
     price: "₹395",
     tag: "Popular",
-    icon: Flame
+    icon: Flame,
+    imageUrl: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=2576&auto=format&fit=crop"
   }
 ];
 
@@ -33,7 +36,7 @@ export function MenuHighlights() {
           <div key={index} className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition-colors">
             <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
               <img
-                src={`https://source.unsplash.com/featured/?food,${item.name}`}
+                src={item.imageUrl}
                 alt={item.name}
                 className="w-full h-full object-cover"
               />
