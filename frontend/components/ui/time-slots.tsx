@@ -11,16 +11,16 @@ interface TimeSlotsProps {
 }
 
 const timeSlots = [
-  { time: '1:00 PM', offers: 2 },
-  { time: '1:30 PM', offers: 2 },
-  { time: '2:00 PM', offers: 2 },
-  { time: '2:30 PM', offers: 2 },
-  { time: '3:00 PM', offers: 2 },
-  { time: '3:30 PM', offers: 2 },
-  { time: '4:00 PM', offers: 2 },
-  { time: '4:30 PM', offers: 2 },
-  { time: '5:00 PM', offers: 2 },
-  { time: '5:30 PM', offers: 2 }
+  { time: '1:00 PM' },
+  { time: '1:30 PM' },
+  { time: '2:00 PM' },
+  { time: '2:30 PM' },
+  { time: '3:00 PM' },
+  { time: '3:30 PM' },
+  { time: '4:00 PM' },
+  { time: '4:30 PM' },
+  { time: '5:00 PM' },
+  { time: '5:30 PM' }
 ];
 
 
@@ -112,7 +112,7 @@ export function TimeSlots({ selectedTime, onTimeSelect, selectedDate, className 
                   )}
                 >
                   <span className="text-gray-900 font-medium">{slot.time}</span>
-                  <span className="text-sm text-blue-600">{slot.offers} offers</span>
+                  
                 </button>
               );
             })}

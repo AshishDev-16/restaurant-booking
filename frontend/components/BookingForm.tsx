@@ -156,132 +156,130 @@ export default function BookingForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6">
-      <div className="space-y-8">
-        {/* Personal Details Section */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <Label className="text-base font-medium text-gray-700">Name *</Label>
-            <div className="relative mt-2">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-400" />
-              </div>
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
-                placeholder="John Doe"
-              />
+    <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Personal Details Section */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <Label className="text-base font-medium text-gray-700">Name *</Label>
+          <div className="relative mt-2">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <User className="h-5 w-5 text-gray-400" />
             </div>
-          </div>
-
-          <div>
-            <Label className="text-base font-medium text-gray-700">Email *</Label>
-            <div className="relative mt-2">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-400" />
-              </div>
-              <Input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
-                placeholder="john@example.com"
-              />
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-base font-medium text-gray-700">Phone *</Label>
-            <div className="relative mt-2">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Phone className="h-5 w-5 text-gray-400" />
-              </div>
-              <Input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/[^\d-]/g, '').slice(0, 12);
-                  setFormData({ ...formData, phone: value });
-                }}
-                required
-                className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
-                placeholder="+91 98765 43210"
-              />
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-base font-medium text-gray-700">Number of Guests *</Label>
-            <div className="mt-2">
-              <GuestSelect
-                value={formData.guests}
-                onChange={(value) => setFormData({ ...formData, guests: value })}
-                className="w-full"
-              />
-            </div>
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+              className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
+              placeholder="John Doe"
+            />
           </div>
         </div>
 
-        {/* Date & Time Selection */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <Label className="text-base font-medium text-gray-700">Select Date *</Label>
-            <div className="mt-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className={cn(
-                      "w-full flex items-center gap-2 px-4 h-12 bg-gray-50 border border-gray-200 rounded-lg text-left text-base hover:bg-gray-100 transition-colors",
-                      !date && "text-gray-500"
-                    )}
-                  >
-                    <CalendarIcon className="h-5 w-5 text-gray-400" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                    className="rounded-lg border border-gray-200"
-                  />
-                </PopoverContent>
-              </Popover>
+        <div>
+          <Label className="text-base font-medium text-gray-700">Email *</Label>
+          <div className="relative mt-2">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-gray-400" />
             </div>
-          </div>
-
-          <div>
-            <Label className="text-base font-medium text-gray-700">Select Time *</Label>
-            <div className="mt-2">
-              <TimeSlots
-                selectedTime={selectedTime}
-                onTimeSelect={setSelectedTime}
-                selectedDate={date}
-                className="w-full"
-              />
-            </div>
+            <Input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+              className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
+              placeholder="john@example.com"
+            />
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full h-12 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? 'Confirming...' : 'Confirm Reservation'}
-        </button>
+        <div>
+          <Label className="text-base font-medium text-gray-700">Phone *</Label>
+          <div className="relative mt-2">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Phone className="h-5 w-5 text-gray-400" />
+            </div>
+            <Input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^\d-]/g, '').slice(0, 12);
+                setFormData({ ...formData, phone: value });
+              }}
+              required
+              className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
+              placeholder="+91 98765 43210"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-base font-medium text-gray-700">Number of Guests *</Label>
+          <div className="mt-2">
+            <GuestSelect
+              value={formData.guests}
+              onChange={(value) => setFormData({ ...formData, guests: value })}
+              className="w-full"
+            />
+          </div>
+        </div>
       </div>
+
+      {/* Date & Time Selection */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <Label className="text-base font-medium text-gray-700">Select Date *</Label>
+          <div className="mt-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "w-full flex items-center gap-2 px-4 h-12 bg-gray-50 border border-gray-200 rounded-lg text-left text-base hover:bg-gray-100 transition-colors",
+                    !date && "text-gray-500"
+                  )}
+                >
+                  <CalendarIcon className="h-5 w-5 text-gray-400" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  disabled={(date) => date < new Date()}
+                  initialFocus
+                  className="rounded-lg border border-gray-200"
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-base font-medium text-gray-700">Select Time *</Label>
+          <div className="mt-2">
+            <TimeSlots
+              selectedTime={selectedTime}
+              onTimeSelect={setSelectedTime}
+              selectedDate={date}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="w-full h-12 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isLoading ? 'Confirming...' : 'Confirm Reservation'}
+      </button>
     </form>
   );
 } 
