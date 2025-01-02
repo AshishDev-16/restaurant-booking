@@ -2,20 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar } from '../components/ui/calendar';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import { Calendar } from './ui/calendar';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 import { TimeSlots } from './ui/time-slots';
 import { useToast } from '../hooks/use-toast';
 import confetti from 'canvas-confetti';
-import { CalendarIcon } from 'lucide-react';
-import { format } from "date-fns"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./ui/popover"
-import { cn } from "../lib/utils"
+import { CalendarIcon, Users, Mail, Phone, User } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { format } from "date-fns";
+import { cn } from "../lib/utils";
+import { GuestSelect } from './ui/guest-select';
 
 export default function BookingForm() {
   const router = useRouter();
@@ -159,164 +156,130 @@ export default function BookingForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <div className="input-group">
-        <Label htmlFor="name" className="input-label">Name *</Label>
-        <Input
-          id="name"
-          className="input-field"
-          required
-          placeholder="John Doe"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
-      </div>
-
-      <div className="input-group">
-        <Label htmlFor="email" className="input-label">Email *</Label>
-        <Input
-          id="email"
-          type="email"
-          className="input-field"
-          required
-          placeholder="john@example.com"
-          pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-      </div>
-
-      <div className="input-group">
-        <Label htmlFor="phone" className="input-label">Phone *</Label>
-        <Input
-          id="phone"
-          className="input-field"
-          required
-          placeholder="123-456-7890"
-          value={formData.phone}
-          onChange={(e) => {
-            const value = e.target.value.replace(/[^\d-]/g, '').slice(0, 12);
-            setFormData({ ...formData, phone: value });
-          }}
-        />
-      </div>
-
-      <div className="input-group">
-        <Label htmlFor="guests" className="input-label">Number of Guests *</Label>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              const newValue = Math.max(1, formData.guests - 1);
-              setFormData({ ...formData, guests: newValue });
-            }}
-            className="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
-          >
-            -
-          </button>
-          <Input
-            id="guests"
-            type="number"
-            className="input-field text-center"
-            required
-            min="1"
-            max="20"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={formData.guests}
-            onChange={(e) => {
-              const value = parseInt(e.target.value);
-              if (!isNaN(value)) {
-                setFormData({ ...formData, guests: Math.max(1, Math.min(20, value)) });
-              }
-            }}
-          />
-          <button
-            type="button"
-            onClick={() => {
-              const newValue = Math.min(20, formData.guests + 1);
-              setFormData({ ...formData, guests: newValue });
-            }}
-            className="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-      <div className="input-group">
-        <Label className="input-label">Select Date & Time *</Label>
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-4">
-          <div className="w-full">
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  className={cn(
-                    "w-full flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 text-left text-sm hover:bg-gray-50",
-                    !date && "text-gray-500"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  disabled={(date) => date < new Date()}
-                  fromDate={new Date()}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6">
+      <div className="space-y-8">
+        {/* Personal Details Section */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <Label className="text-base font-medium text-gray-700">Name *</Label>
+            <div className="relative mt-2">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <Input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+                className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
+                placeholder="John Doe"
+              />
+            </div>
           </div>
-          
-          <div className="w-full">
-            <TimeSlots
-              selectedTime={selectedTime}
-              onTimeSelect={setSelectedTime}
-              selectedDate={date}
-            />
+
+          <div>
+            <Label className="text-base font-medium text-gray-700">Email *</Label>
+            <div className="relative mt-2">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-gray-400" />
+              </div>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+                className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
+                placeholder="john@example.com"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-base font-medium text-gray-700">Phone *</Label>
+            <div className="relative mt-2">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Phone className="h-5 w-5 text-gray-400" />
+              </div>
+              <Input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^\d-]/g, '').slice(0, 12);
+                  setFormData({ ...formData, phone: value });
+                }}
+                required
+                className="pl-11 h-12 bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-base"
+                placeholder="+91 98765 43210"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-base font-medium text-gray-700">Number of Guests *</Label>
+            <div className="mt-2">
+              <GuestSelect
+                value={formData.guests}
+                onChange={(value) => setFormData({ ...formData, guests: value })}
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex gap-4 mt-6">
-        <button
-          type="button"
-          onClick={() => {
-            setFormData({
-              name: '',
-              email: '',
-              phone: '',
-              guests: 1,
-            });
-            setDate(undefined);
-            setSelectedTime('');
-          }}
-          className="w-1/3 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-        >
-          Clear Form
-        </button>
+        {/* Date & Time Selection */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <Label className="text-base font-medium text-gray-700">Select Date *</Label>
+            <div className="mt-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      "w-full flex items-center gap-2 px-4 h-12 bg-gray-50 border border-gray-200 rounded-lg text-left text-base hover:bg-gray-100 transition-colors",
+                      !date && "text-gray-500"
+                    )}
+                  >
+                    <CalendarIcon className="h-5 w-5 text-gray-400" />
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    disabled={(date) => date < new Date()}
+                    initialFocus
+                    className="rounded-lg border border-gray-200"
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-base font-medium text-gray-700">Select Time *</Label>
+            <div className="mt-2">
+              <TimeSlots
+                selectedTime={selectedTime}
+                onTimeSelect={setSelectedTime}
+                selectedDate={date}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </div>
+
         <button
           type="submit"
           disabled={isLoading}
-          className="w-2/3 bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
+          className="w-full h-12 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? (
-            <>
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Booking...
-            </>
-          ) : (
-            'Book Table'
-          )}
+          {isLoading ? 'Confirming...' : 'Confirm Reservation'}
         </button>
       </div>
     </form>

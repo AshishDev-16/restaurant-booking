@@ -1,4 +1,4 @@
-import { LocationMap } from '../../components/LocationMap';
+import { LocationMap } from '../../../components/LocationMap';
 
 export default function ContactPage() {
   return (

@@ -1,4 +1,4 @@
-import { DetailedReviews } from '../../components/DetailedReviews';
+import { DetailedReviews } from '../../../components/DetailedReviews';
 
 export default function ReviewsPage() {
   return (

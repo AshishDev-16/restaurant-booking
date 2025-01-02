@@ -1,4 +1,4 @@
-import { MenuHighlights } from '../../components/MenuHighlights';
+import { MenuHighlights } from '../../../components/MenuHighlights';
 
 export default function MenuPage() {
   return (

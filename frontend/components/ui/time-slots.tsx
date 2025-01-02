@@ -1,19 +1,45 @@
 import { cn } from "../../lib/utils"
 import { useEffect, useState } from "react"
+import { Popover, PopoverContent, PopoverTrigger } from "./popover"
+import { Clock } from "lucide-react"
 
 interface TimeSlotsProps {
   selectedTime: string
   onTimeSelect: (time: string) => void
   selectedDate: Date | undefined
+  className?: string
 }
 
 const timeSlots = [
-  '11:00', '11:30', '12:00', '12:30', '13:00', '13:30',
-  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
-  '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
-]
+  { time: '1:00 PM', offers: 2 },
+  { time: '1:30 PM', offers: 2 },
+  { time: '2:00 PM', offers: 2 },
+  { time: '2:30 PM', offers: 2 },
+  { time: '3:00 PM', offers: 2 },
+  { time: '3:30 PM', offers: 2 },
+  { time: '4:00 PM', offers: 2 },
+  { time: '4:30 PM', offers: 2 },
+  { time: '5:00 PM', offers: 2 },
+  { time: '5:30 PM', offers: 2 }
+];
 
-export function TimeSlots({ selectedTime, onTimeSelect, selectedDate }: TimeSlotsProps) {
+
+const convertTo24Hour = (time12h: string) => {
+  const [time, modifier] = time12h.split(' ');
+  let [hours, minutes] = time.split(':');
+  
+  if (hours === '12') {
+    hours = '00';
+  }
+  
+  if (modifier === 'PM') {
+    hours = String(parseInt(hours, 10) + 12);
+  }
+  
+  return `${hours}:${minutes}`;
+};
+
+export function TimeSlots({ selectedTime, onTimeSelect, selectedDate, className }: TimeSlotsProps) {
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
 
   useEffect(() => {
@@ -24,13 +50,11 @@ export function TimeSlots({ selectedTime, onTimeSelect, selectedDate }: TimeSlot
         const response = await fetch('/api/bookings');
         const bookings = await response.json();
         
-        // Filter bookings for selected date
         const dateBookings = bookings.filter((booking: any) => {
           const bookingDate = new Date(booking.date);
           return bookingDate.toDateString() === selectedDate.toDateString();
         });
         
-        // Get all booked times for this date
         const bookedTimes = dateBookings.map((booking: any) => booking.time);
         setBookedSlots(bookedTimes);
       } catch (error) {
@@ -41,29 +65,60 @@ export function TimeSlots({ selectedTime, onTimeSelect, selectedDate }: TimeSlot
     fetchBookedSlots();
   }, [selectedDate]);
 
+  const handleTimeSelect = (time12h: string) => {
+    const time24h = convertTo24Hour(time12h);
+    onTimeSelect(time24h);
+  };
+
+  const displayTime = (time24h: string | null) => {
+    if (!time24h) return null;
+   
+    const [hours, minutes] = time24h.split(':');
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minutes} ${ampm}`;
+  };
+
   return (
-    <div className="mt-2">
-      <div className="mb-2 text-sm font-medium text-gray-700">Available Times</div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 min-w-[300px] sm:min-w-0">
-        {timeSlots.map((time) => {
-          const isBooked = bookedSlots.includes(time);
-          return (
-            <button
-              key={time}
-              type="button"
-              disabled={isBooked}
-              onClick={() => onTimeSelect(time)}
-              className={cn(
-                "time-slot whitespace-nowrap",
-                isBooked ? "bg-gray-200 text-gray-400 cursor-not-allowed" : 
-                selectedTime === time ? "selected" : ""
-              )}
-            >
-              {time} {isBooked && '(Booked)'}
-            </button>
-          )
-        })}
-      </div>
+    <div className={className}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={cn(
+              "w-full flex items-center gap-2 px-4 h-12 bg-gray-50 border border-gray-200 rounded-lg text-left text-base hover:bg-gray-100 transition-colors",
+              !selectedTime && "text-gray-500"
+            )}
+          >
+            <Clock className="h-5 w-5 text-gray-400" />
+            {selectedTime ? displayTime(selectedTime) : <span>Select time</span>}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[320px] p-3" align="start">
+          <div className="grid grid-cols-2 gap-2">
+            {timeSlots.map((slot) => {
+              const isBooked = bookedSlots.includes(convertTo24Hour(slot.time));
+              return (
+                <button
+                  key={slot.time}
+                  type="button"
+                  disabled={isBooked}
+                  onClick={() => handleTimeSelect(slot.time)}
+                  className={cn(
+                    "flex flex-col items-center p-3 rounded-lg border hover:border-blue-500 transition-all",
+                    selectedTime === convertTo24Hour(slot.time) ? "border-blue-500 bg-blue-50" : "border-gray-200",
+                    isBooked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                  )}
+                >
+                  <span className="text-gray-900 font-medium">{slot.time}</span>
+                  <span className="text-sm text-blue-600">{slot.offers} offers</span>
+                </button>
+              );
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
-  )
+  );
 } 
