@@ -1,4 +1,4 @@
-# Restaurant TableBooking System
+# Restaurant Table Booking System
 
 A restaurant table booking application with a strong focus on frontend user experience and design, built with Next.js. Features a modern, responsive interface and basic backend integration for managing reservations.
 
