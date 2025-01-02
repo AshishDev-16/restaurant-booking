@@ -2,23 +2,23 @@ import { ChefHat, Award, Flame } from 'lucide-react';
 
 const menuItems = [
   {
-    name: "Pan Seared Salmon",
-    description: "Fresh Atlantic salmon with lemon butter sauce and seasonal vegetables",
-    price: "₹895",
+    name: "Paneer Tikka Masala",
+    description: "Fresh cottage cheese in rich aromatic gravy with bell peppers and Indian spices",
+    price: "₹495",
     tag: "Chef's Special",
     icon: ChefHat
   },
   {
-    name: "Truffle Risotto",
+    name: "Truffle Mushroom Risotto",
     description: "Creamy Arborio rice with wild mushrooms and black truffle",
     price: "₹795",
     tag: "Award Winner",
     icon: Award
   },
   {
-    name: "Wagyu Beef Steak",
-    description: "Grade A5 Japanese Wagyu with red wine reduction",
-    price: "₹2495",
+    name: "Dal Makhani",
+    description: "Slow-cooked black lentils with rich cream and butter, a house specialty",
+    price: "₹395",
     tag: "Popular",
     icon: Flame
   }
