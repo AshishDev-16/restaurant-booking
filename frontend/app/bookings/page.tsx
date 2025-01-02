@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useToast } from '../../hooks/use-toast';
-import { CalendarDays, Users, Mail, Phone, Trash2, PlusCircle, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CalendarDays, Users, Mail, Phone, Trash2, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { ConfirmationDialog } from '../../components/ui/confirmation-dialog';
+import { StatusBadge } from '../../components/ui/status-badge';
+import { format } from 'date-fns';
+import { BookingActions } from '../../components/ui/booking-actions';
 
 interface Booking {
   _id: string;
@@ -57,15 +60,15 @@ export default function BookingsPage() {
         setBookings(bookings.filter(booking => booking._id !== deleteId));
         toast({
           title: "Success",
-          description: "Booking deleted successfully",
+          description: "Booking cancelled successfully",
         });
       } else {
-        throw new Error('Failed to delete booking');
+        throw new Error('Failed to cancel booking');
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to delete booking",
+        description: "Failed to cancel booking",
         variant: "destructive",
       });
     } finally {
@@ -96,93 +99,96 @@ export default function BookingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="p-4 sm:p-8 bg-blue-500 text-white">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold mb-2">Manage Bookings</h1>
-                <p className="text-blue-100 text-sm sm:text-base">View and manage all restaurant bookings</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-2xl font-bold mb-6">My Bookings</h1>
+          
+          <div className="space-y-6">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
               </div>
-              <a 
-                href="/"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-blue-500 px-4 sm:px-6 py-2 sm:py-3 rounded-full hover:shadow-lg transition-all text-sm sm:text-base"
-              >
-                <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>New Booking</span>
-              </a>
-            </div>
-          </div>
-
-          <div className="p-4 sm:p-8">
-            {bookings.length === 0 ? (
-              <div className="text-center py-8 sm:py-12">
-                <CalendarDays className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-2">No Bookings Found</h3>
-                <p className="text-sm sm:text-base text-gray-500">There are no bookings in the system yet.</p>
+            ) : bookings.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No bookings found</p>
               </div>
             ) : (
-              <div className="overflow-x-auto -mx-4 sm:-mx-8 px-4 sm:px-8 md:mx-0 md:px-0">
+              <div>
+                {/* Desktop view */}
                 <div className="hidden md:block">
-                  <table className="w-full min-w-[800px]">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Guest Details</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Date & Time</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Party Size</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Contact</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentBookings.map((booking) => (
-                        <tr key={booking._id} className="border-b border-gray-100 hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="md:hidden font-medium text-gray-500 mb-1">Guest Details</div>
-                            <div className="font-medium text-gray-900">{booking.name}</div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2 text-gray-700">
-                              <CalendarDays className="w-4 h-4 text-gray-400" />
-                              <span>{new Date(booking.date).toLocaleDateString()}</span>
-                              <span className="text-gray-400">|</span>
-                              <span>{booking.time}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2 text-gray-700">
-                              <Users className="w-4 h-4 text-gray-400" />
-                              <span>{booking.guests} guests</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2 text-gray-700">
-                                <Mail className="w-4 h-4 text-gray-400" />
-                                <span>{booking.email}</span>
-                              </div>
-                              <div className="flex items-center gap-2 text-gray-700">
-                                <Phone className="w-4 h-4 text-gray-400" />
-                                <span>{booking.phone}</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <button
-                              onClick={() => handleDeleteClick(booking._id)}
-                              className="inline-flex items-center gap-1 text-red-500 hover:text-red-700 transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>Cancel Booking</span>
-                            </button>
-                          </td>
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date & Time
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Guest Details
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Contact
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {currentBookings.map((booking) => (
+                          <tr key={booking._id}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <StatusBadge date={booking.date} time={booking.time} />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center gap-1.5 text-sm text-gray-900">
+                                <CalendarDays className="w-4 h-4 text-gray-400" />
+                                <span>{format(new Date(booking.date), "MMM d, yyyy")}</span>
+                                <span className="text-gray-400">|</span>
+                                <span>{booking.time}</span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="md:hidden font-medium text-gray-500 mb-1">Guest Details</div>
+                              <div className="font-medium text-gray-900">{booking.name}</div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-gray-700">
+                                  <Mail className="w-4 h-4 text-gray-400" />
+                                  <span>{booking.email}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-gray-700">
+                                  <Phone className="w-4 h-4 text-gray-400" />
+                                  <span>{booking.phone}</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right">
+                              <div className="flex items-center justify-end space-x-2">
+                                <BookingActions booking={booking} />
+                                <Button
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => handleDeleteClick(booking._id)}
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
+                {/* Mobile view */}
                 <div className="md:hidden space-y-4">
                   {currentBookings.map((booking) => (
                     <div 
@@ -190,19 +196,15 @@ export default function BookingsPage() {
                       className="bg-white rounded-lg border border-gray-200 p-4 space-y-3"
                     >
                       <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{booking.name}</h3>
-                          <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
-                            <Users className="w-4 h-4" />
-                            <span>{booking.guests} guests</span>
-                          </div>
-                        </div>
-                        <button
+                        <StatusBadge date={booking.date} time={booking.time} />
+                        <Button
+                          variant="ghost" 
+                          size="icon"
                           onClick={() => handleDeleteClick(booking._id)}
-                          className="text-red-500 p-2 hover:bg-red-50 rounded-full transition-colors"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="w-4 h-4" />
-                        </button>
+                        </Button>
                       </div>
 
                       <div className="space-y-2 pt-2 border-t border-gray-100">
@@ -223,10 +225,15 @@ export default function BookingsPage() {
                           <span>{booking.phone}</span>
                         </div>
                       </div>
+
+                      <div className="pt-3 mt-3 border-t border-gray-100">
+                        <BookingActions booking={booking} />
+                      </div>
                     </div>
                   ))}
                 </div>
 
+                {/* Pagination */}
                 <div className="mt-4 sm:mt-6">
                   <div className="flex items-center justify-between px-2 py-3 sm:py-4 border-t">
                     <Button

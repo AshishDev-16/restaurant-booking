@@ -40,10 +40,10 @@ export function RestaurantHeader() {
               <span className="text-gray-600">11:00 AM - 11:00 PM</span>
             </div>
             <div className="flex items-center gap-4">
-              <button className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+              <button className="px-4 py-2 rounded-full bg-blue-100 hover:bg-gray-200 transition-colors">
                 Direction
               </button>
-              <button className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+              <button className="px-4 py-2 rounded-full bg-blue-100 hover:bg-gray-200 transition-colors">
                 Share
               </button>
             </div>

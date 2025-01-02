@@ -8,11 +8,15 @@ import { Label } from './ui/label';
 import { TimeSlots } from './ui/time-slots';
 import { useToast } from '../hooks/use-toast';
 import confetti from 'canvas-confetti';
-import { CalendarIcon, Users, Mail, Phone, User } from 'lucide-react';
+import { CalendarIcon, Users, Mail, Phone, User, CheckCircle, CalendarDays, Clock, Share2, ClipboardList } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { format } from "date-fns";
 import { cn } from "../lib/utils";
 import { GuestSelect } from './ui/guest-select';
+import { Button } from './ui/button';
+import { parse } from 'date-fns';
+import { BookingNextSteps } from './ui/booking-next-steps';
+
 
 export default function BookingForm() {
   const router = useRouter();
@@ -121,36 +125,60 @@ export default function BookingForm() {
 
   if (showConfirmation) {
     return (
-      <div className="p-6">
-        <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-4">
-          <h3 className="text-lg font-semibold text-green-800 mb-2">
-            Booking Confirmed!
-          </h3>
-          <div className="space-y-2 text-sm text-green-700">
-            <p><strong>Name:</strong> {formData.name}</p>
-            <p><strong>Date:</strong> {date ? format(date, "PPP") : ''}</p>
-            <p><strong>Time:</strong> {selectedTime}</p>
-            <p><strong>Guests:</strong> {formData.guests}</p>
-            <p><strong>Email:</strong> {formData.email}</p>
-            <p><strong>Phone:</strong> {formData.phone}</p>
+      <div className="p-6 max-w-md mx-auto">
+        <div className="bg-white border border-green-100 rounded-lg p-6 space-y-6">
+          <div className="text-center">
+            <div className="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="h-6 w-6" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-1">
+              🎉 Your Table is Reserved!
+            </h3>
+            <p className="text-gray-600">
+              Thank you for choosing The Gourmet Kitchen. We're excited to serve you!
+            </p>
           </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-medium text-gray-700">Reservation Details:</h4>
+            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+              <div className="flex items-center gap-3 text-gray-600">
+                <User className="w-4 h-4 text-gray-400" />
+                <span>Reserved for: <span className="text-gray-900">{formData.name}</span></span>
+              </div>
+              <div className="flex items-center gap-3 text-gray-600">
+                <CalendarDays className="w-4 h-4 text-gray-400" />
+                <span>Date: <span className="text-gray-900">{date ? format(date, "MMMM d, yyyy") : ''}</span></span>
+              </div>
+              <div className="flex items-center gap-3 text-gray-600">
+                <Clock className="w-4 h-4 text-gray-400" />
+                <span>Time: <span className="text-gray-900">{format(parse(selectedTime, 'HH:mm', new Date()), 'h:mm a')}</span></span>
+              </div>
+              <div className="flex items-center gap-3 text-gray-600">
+                <Users className="w-4 h-4 text-gray-400" />
+                <span>Party Size: <span className="text-gray-900">{formData.guests} {formData.guests === 1 ? 'guest' : 'guests'}</span></span>
+              </div>
+            </div>
+          </div>
+
+          <BookingNextSteps 
+            onMakeAnother={() => {
+              setShowConfirmation(false);
+              setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                guests: 1,
+              });
+              setDate(undefined);
+              setSelectedTime('');
+            }}
+          />
+
+          <p className="text-center text-sm text-gray-500 mt-4">
+            We look forward to welcoming you!
+          </p>
         </div>
-        <button
-          onClick={() => {
-            setShowConfirmation(false);
-            setFormData({
-              name: '',
-              email: '',
-              phone: '',
-              guests: 1,
-            });
-            setDate(undefined);
-            setSelectedTime('');
-          }}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          Make another booking
-        </button>
       </div>
     );
   }
