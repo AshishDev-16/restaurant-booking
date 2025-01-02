@@ -34,7 +34,7 @@ import {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={onConfirm} className="bg-red-500 hover:bg-red-600">
-              Delete
+              Cancel Booking
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

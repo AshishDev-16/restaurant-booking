@@ -174,7 +174,7 @@ export default function BookingsPage() {
                               className="inline-flex items-center gap-1 text-red-500 hover:text-red-700 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
-                              <span>Delete</span>
+                              <span>Cancel Booking</span>
                             </button>
                           </td>
                         </tr>
@@ -263,8 +263,8 @@ export default function BookingsPage() {
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
         onConfirm={handleDelete}
-        title="Delete Booking"
-        description="Are you sure you want to delete this booking? This action cannot be undone."
+        title="Cancel Booking"
+        description="Are you sure you want to cancel this booking? This action cannot be undone."
       />
     </div>
   );

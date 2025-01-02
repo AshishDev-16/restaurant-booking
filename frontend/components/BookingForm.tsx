@@ -8,6 +8,14 @@ import { Label } from '../components/ui/label';
 import { TimeSlots } from './ui/time-slots';
 import { useToast } from '../hooks/use-toast';
 import confetti from 'canvas-confetti';
+import { CalendarIcon } from 'lucide-react';
+import { format } from "date-fns"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./ui/popover"
+import { cn } from "../lib/utils"
 
 export default function BookingForm() {
   const router = useRouter();
@@ -41,8 +49,12 @@ export default function BookingForm() {
         description: 'Please select both date and time',
         variant: 'destructive',
       });
+      setIsLoading(false);
       return;
     }
+
+    const formattedDate = new Date(date);
+    formattedDate.setHours(0, 0, 0, 0);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
@@ -81,7 +93,7 @@ export default function BookingForm() {
         },
         body: JSON.stringify({
           ...formData,
-          date,
+          date: formattedDate.toISOString(),
           time: selectedTime,
         }),
       });
@@ -119,7 +131,7 @@ export default function BookingForm() {
           </h3>
           <div className="space-y-2 text-sm text-green-700">
             <p><strong>Name:</strong> {formData.name}</p>
-            <p><strong>Date:</strong> {date?.toLocaleDateString()}</p>
+            <p><strong>Date:</strong> {date ? format(date, "PPP") : ''}</p>
             <p><strong>Time:</strong> {selectedTime}</p>
             <p><strong>Guests:</strong> {formData.guests}</p>
             <p><strong>Email:</strong> {formData.email}</p>
@@ -236,14 +248,30 @@ export default function BookingForm() {
         <Label className="input-label">Select Date & Time *</Label>
         <div className="grid md:grid-cols-2 gap-6 sm:gap-4">
           <div className="w-full">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className="border shadow-sm"
-              disabled={(date) => date < new Date()}
-              fromDate={new Date()}
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "w-full flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 text-left text-sm hover:bg-gray-50",
+                    !date && "text-gray-500"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  disabled={(date) => date < new Date()}
+                  fromDate={new Date()}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           
           <div className="w-full">

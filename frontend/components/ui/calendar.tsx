@@ -3,7 +3,6 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
-
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
 
@@ -18,34 +17,31 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 bg-white rounded-lg shadow-sm", className)}
+      className={cn("p-4 bg-white rounded-lg", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4 w-full",
-        caption: "flex justify-center pt-1 relative items-center px-8",
+        months: "flex flex-col",
+        month: "space-y-4",
+        caption: "flex justify-between px-1 relative items-center",
         caption_label: "text-sm font-medium",
-        nav: "flex items-center",
+        nav: "flex items-center gap-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100 hover:bg-blue-150 transition-all"
+          "h-7 w-7 bg-transparent p-0 border-0"
         ),
-        nav_button_previous: "absolute left-1",
-        nav_button_next: "absolute right-1",
         table: "w-full border-collapse",
         head_row: "flex w-full",
-        head_cell: "w-[14.28%] text-center text-gray-500 text-sm py-2",
-        row: "flex w-full mt-0",
-        cell: "relative w-[14.28%] text-center text-sm p-0 [&:has([aria-selected])]:bg-blue-150 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+        head_cell: "w-[14.28%] text-center text-xs text-gray-500 font-normal",
+        row: "flex w-full mt-2",
+        cell: "w-[14.28%] text-center relative p-0",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-blue-50 hover:text-blue-600 transition-all"
+          "h-8 w-8 p-0 font-normal text-sm hover:bg-gray-50 mx-auto"
         ),
-        day_selected: cn(
-          "bg-blue-600 text-white hover:bg-blue-800 hover:text-white focus:bg-blue-600 focus:text-white"
-        ),
-        day_today: "bg-gray-100 text-gray-900 font-semibold",
-        day_outside: "text-gray-400 opacity-50 hover:bg-transparent hover:text-gray-400",
-        day_disabled: "text-gray-400 opacity-50 hover:bg-transparent cursor-not-allowed",
+        day_selected: 
+          "bg-blue-50 text-blue-600 hover:bg-blue-50 hover:text-blue-600",
+        day_today: "text-black font-semibold",
+        day_outside: "text-gray-300",
+        day_disabled: "text-gray-300",
         day_hidden: "invisible",
         ...classNames,
       }}
